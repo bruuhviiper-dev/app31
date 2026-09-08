@@ -98,7 +98,7 @@ class _ImagesScreenState extends State<ImagesScreen> {
                         label: Text(switch (k) {
                           _Kind.fundos => 'Fundos',
                           _Kind.texturas => 'Texturas',
-                          _Kind.fotos => 'Fotos reais',
+                          _Kind.fotos => 'Fotos',
                           _Kind.criativos => 'Criativos',
                         }),
                         selected: _kind == k,

@@ -6,8 +6,8 @@
             <gradient
                 android:type="linear"
                 android:angle="315"
-                android:startColor="#FF2C5364"
-                android:endColor="#FF0F2027" />
+                android:startColor="#FF5FD24A"
+                android:endColor="#FF0A7A44" />
         </shape>
     </item>
     <item android:drawable="@drawable/ic_launcher_foreground"

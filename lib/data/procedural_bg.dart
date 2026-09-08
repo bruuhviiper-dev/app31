@@ -11,26 +11,26 @@ import 'package:flutter/material.dart';
 class ProceduralBg {
   ProceduralBg._();
 
-  /// Paletas base (gradiente). Bonitas, com bom contraste pra texto claro.
+  /// Paletas base (gradiente) SERENAS — clima de reflexão/contemplação
+  /// (verde-teal da capa, amanhecer, névoa, azul-noite calmo). Bom contraste
+  /// pra texto claro.
   static const List<List<Color>> palettes = [
-    [Color(0xFFFF758C), Color(0xFFFF7EB3)],
-    [Color(0xFF667EEA), Color(0xFF764BA2)],
-    [Color(0xFFF7971E), Color(0xFFFFD200)],
-    [Color(0xFF11998E), Color(0xFF38EF7D)],
-    [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
-    [Color(0xFFEB3349), Color(0xFFF45C43)],
-    [Color(0xFF2193B0), Color(0xFF6DD5ED)],
-    [Color(0xFFDA22FF), Color(0xFF9733EE)],
-    [Color(0xFFF12711), Color(0xFFF5AF19)],
-    [Color(0xFF141E30), Color(0xFF243B55)],
-    [Color(0xFFFC466B), Color(0xFF3F5EFB)],
-    [Color(0xFF0F2027), Color(0xFF2C5364)],
-    [Color(0xFFee9ca7), Color(0xFFb24592)],
-    [Color(0xFFf6d365), Color(0xFFfda085)],
-    [Color(0xFF4b6cb7), Color(0xFF182848)],
-    [Color(0xFF5f2c82), Color(0xFF49a09d)],
-    [Color(0xFFc471f5), Color(0xFFfa71cd)],
-    [Color(0xFFf857a6), Color(0xFFff5858)],
+    [Color(0xFF0C6E5C), Color(0xFF043D36)], // verde-teal da capa
+    [Color(0xFF1F4037), Color(0xFF99A88E)], // musgo -> sálvia
+    [Color(0xFF2C5364), Color(0xFF0F2027)], // amanhecer celeste
+    [Color(0xFF134E5E), Color(0xFF71B280)], // teal -> verde bruma
+    [Color(0xFF4B6CB7), Color(0xFF182848)], // azul-noite calmo
+    [Color(0xFF3A6073), Color(0xFF16222A)], // azul-ardósia
+    [Color(0xFF11998E), Color(0xFF0B5E52)], // verde-água profundo
+    [Color(0xFF0F2027), Color(0xFF203A43)], // noite serena
+    [Color(0xFF283048), Color(0xFF859398)], // aço sereno
+    [Color(0xFF5C258D), Color(0xFF4389A2)], // crepúsculo lilás-teal
+    [Color(0xFF232526), Color(0xFF414345)], // névoa cinza
+    [Color(0xFF16A085), Color(0xFF0E5F4E)], // esmeralda serena
+    [Color(0xFF1D4350), Color(0xFF5C7A6B)], // teal sóbrio
+    [Color(0xFF334D50), Color(0xFF0F2027)], // névoa escura
+    [Color(0xFF0B486B), Color(0xFF3A7B8C)], // maré azul calma
+    [Color(0xFF3E5151), Color(0xFFDECBA4)], // entardecer sereno
   ];
 
   static const int _styles = 7;
@@ -102,7 +102,7 @@ class ProceduralPainter extends CustomPainter {
         _waves(canvas, r, w, h, tint);
         break;
       case 3:
-        _hearts(canvas, r, w, h);
+        _mist(canvas, r, w, h);
         break;
       case 4:
         _sparkles(canvas, r, w, h);
@@ -111,7 +111,7 @@ class ProceduralPainter extends CustomPainter {
         _rings(canvas, r, w, h);
         break;
       case 6:
-        _confetti(canvas, r, w, h);
+        _stars(canvas, r, w, h);
         break;
     }
 
@@ -175,23 +175,17 @@ class ProceduralPainter extends CustomPainter {
     }
   }
 
-  void _hearts(Canvas c, _Rnd r, double w, double h) {
-    final n = 7 + r.intg(8);
-    for (var i = 0; i < n; i++) {
-      final s = r.range(w * 0.05, w * 0.14);
-      _heart(c, Offset(r.range(0, w), r.range(0, h)), s,
-          Colors.white.withValues(alpha: r.range(0.05, 0.14)));
+  /// Névoa: faixas horizontais suaves (bruma sobre a água) — meditativo.
+  void _mist(Canvas c, _Rnd r, double w, double h) {
+    final bands = 3 + r.intg(3);
+    for (var i = 0; i < bands; i++) {
+      final y = r.range(h * 0.15, h * 0.9);
+      final bh = r.range(h * 0.06, h * 0.16);
+      c.drawRect(
+        Rect.fromLTWH(0, y, w, bh),
+        Paint()..color = Colors.white.withValues(alpha: r.range(0.03, 0.07)),
+      );
     }
-  }
-
-  void _heart(Canvas c, Offset o, double s, Color color) {
-    final p = Path();
-    p.moveTo(o.dx, o.dy + s * 0.3);
-    p.cubicTo(o.dx - s * 0.5, o.dy - s * 0.3, o.dx - s * 0.5, o.dy + s * 0.35,
-        o.dx, o.dy + s * 0.7);
-    p.cubicTo(o.dx + s * 0.5, o.dy + s * 0.35, o.dx + s * 0.5, o.dy - s * 0.3,
-        o.dx, o.dy + s * 0.3);
-    c.drawPath(p, Paint()..color = color);
   }
 
   void _sparkles(Canvas c, _Rnd r, double w, double h) {
@@ -227,19 +221,15 @@ class ProceduralPainter extends CustomPainter {
     }
   }
 
-  void _confetti(Canvas c, _Rnd r, double w, double h) {
-    final n = 18 + r.intg(16);
+  /// Céu estrelado sereno: pontinhos de luz na parte de cima (noite calma).
+  void _stars(Canvas c, _Rnd r, double w, double h) {
+    final n = 30 + r.intg(30);
     for (var i = 0; i < n; i++) {
-      final o = Offset(r.range(0, w), r.range(0, h));
-      final s = r.range(4, 10);
-      c.save();
-      c.translate(o.dx, o.dy);
-      c.rotate(r.range(0, math.pi));
-      c.drawRect(
-        Rect.fromCenter(center: Offset.zero, width: s, height: s * 0.5),
-        Paint()..color = Colors.white.withValues(alpha: r.range(0.08, 0.2)),
+      c.drawCircle(
+        Offset(r.range(0, w), r.range(0, h * 0.7)),
+        r.range(0.8, 2.2),
+        Paint()..color = Colors.white.withValues(alpha: r.range(0.15, 0.6)),
       );
-      c.restore();
     }
   }
 
